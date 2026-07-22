@@ -1,53 +1,49 @@
-📘 README — Backend Node.js / Express / MongoDB
-🚀 Présentation
-Ce backend constitue l’API de mon portfolio professionnel.
-Il est développé avec :
+# 📘 Backend — Portfolio API (Node.js / Express / MongoDB)
 
-Node.js
+Backend de l’API de mon portfolio professionnel.  
+Développé avec **Node.js**, **Express**, **MongoDB** et **JWT** pour l’authentification.
 
-Express
+---
 
-MongoDB + Mongoose
+## 🚀 Présentation
 
-JWT pour l’authentification
+Ce backend constitue l’API de mon portfolio professionnel.  
+Il fournit toutes les fonctionnalités nécessaires au frontend Angular :
 
-Architecture MVC
+- 🔐 Authentification (login / register)
+- 📁 CRUD Projets
+- 🧩 CRUD Services
 
-Routes RESTful
+Architecture :
 
-Validation simple
+- 🧱 Architecture MVC
+- 🌐 Routes RESTful
+- ✅ Validation simple
+- 🧹 Séparation claire des responsabilités
 
-Séparation claire des responsabilités
+---
 
-Il fournit toutes les fonctionnalités nécessaires au frontend Angular 21 :
+## 🛠️ Technologies utilisées
 
-Authentification (login / register)
+### 🔧 Backend
 
-CRUD Projets
+- Node.js  
+- Express  
+- Mongoose  
+- JSON Web Tokens (JWT)  
+- bcrypt (hash des mots de passe)  
+- dotenv (variables d’environnement)  
+- CORS (communication avec le frontend)
 
-CRUD Services
+### 🗄️ Base de données
 
-🛠️ Technologies utilisées
-Backend
-Node.js
+- MongoDB (Atlas ou local)
 
-Express
+---
 
-Mongoose
+## 📂 Structure du projet
 
-JSON Web Tokens (JWT)
-
-bcrypt pour le hash des mots de passe
-
-dotenv pour les variables d’environnement
-
-CORS pour la communication avec le frontend
-
-Base de données
-MongoDB (Atlas ou local)
-
-📂 Structure du projet
-Code
+```text
 backend/
  ├── controllers/
  │     ├── auth.controller.js
@@ -67,118 +63,150 @@ backend/
  │     └── db.js
  ├── server.js
  └── .env
-🔐 Authentification JWT
+```
+
+---
+
+## 🔐 Authentification JWT
+
 Le backend inclut un système complet d’authentification :
 
-Register
-Création d’un utilisateur
+### 🧾 Register
+- Création d’un utilisateur  
+- Hash du mot de passe avec **bcrypt**  
+- Vérification des doublons (email)
 
-Hash du mot de passe avec bcrypt
+### 🔑 Login
+- Vérification email + mot de passe  
+- Génération d’un token **JWT**  
+- Envoi du token au frontend
 
-Vérification des doublons
+### 🛡️ Middleware d’authentification
+- Vérifie la présence du token  
+- Vérifie la validité du token  
+- Protège les routes admin / protégées  
 
-Login
-Vérification email + mot de passe
+---
 
-Génération d’un token JWT
+## 🧩 Modèles Mongoose
 
-Envoi du token au frontend
-
-Middleware d’authentification
-Vérifie la présence du token
-
-Vérifie la validité du token
-
-Protège les routes admin
-
-🧩 Modèles Mongoose
-User
-js
+### 👤 User
+```js
 email: String,
 password: String
-Project
-js
+```
+
+### 📁 Project
+```js
 title: String,
 description: String,
 image: String,
 tech: [String],
 createdAt: Date
-Service
-js
+```
+
+### 🧩 Service
+```js
 title: String,
 description: String,
 icon: String
-🔧 Routes API
-Auth
-Code
+```
+
+---
+
+## 🔧 Routes API
+
+### 🔐 Auth
+```http
 POST /api/auth/register
 POST /api/auth/login
-Projects
-Code
+```
+
+### 📁 Projects
+```http
 GET    /api/projects
 GET    /api/projects/:id
 POST   /api/projects
 PUT    /api/projects/:id
 DELETE /api/projects/:id
-Services
-Code
+```
+
+### 🧩 Services
+```http
 GET    /api/services
 GET    /api/services/:id
 POST   /api/services
 PUT    /api/services/:id
 DELETE /api/services/:id
-📦 Installation
-1. Cloner le projet
-bash
+```
+
+---
+
+## 📦 Installation
+
+### 1️⃣ Cloner le projet
+```bash
 git clone <url-du-repo>
 cd backend
-2. Installer les dépendances
-bash
-npm install
-3. Configurer les variables d’environnement
-Créer un fichier .env :
+```
 
-Code
+### 2️⃣ Installer les dépendances
+```bash
+npm install
+```
+
+---
+
+## ⚙️ Configuration
+
+Créer un fichier `.env` à la racine :
+
+```env
 PORT=3000
 MONGO_URI=mongodb+srv://...
 JWT_SECRET=ton_secret
-4. Lancer le serveur
-bash
+```
+
+---
+
+## ▶️ Lancer le serveur
+```bash
 npm start
+```
+
 Le backend démarre sur :
 
-Code
+```
 http://localhost:3000
-🗄️ Base de données
-Le backend utilise MongoDB.
-Tu peux utiliser :
+```
 
-MongoDB Atlas (cloud)
+---
 
-MongoDB local
+## 🗄️ Base de données
 
-La connexion est gérée dans config/db.js.
+Le backend utilise **MongoDB**.  
+La connexion est gérée dans `config/db.js`.
 
-🔐 Sécurité
-Hash des mots de passe (bcrypt)
+Compatible avec :
 
-Tokens JWT signés avec JWT_SECRET
+- ☁️ MongoDB Atlas  
+- 💻 MongoDB local  
 
-Middleware de protection des routes admin
+---
 
-CORS configuré pour le frontend Angular
+## 🛡️ Sécurité
 
-🧪 Tests (optionnel)
-Tu peux ajouter Jest ou Vitest côté backend si tu veux.
-Actuellement, le backend ne contient pas de tests automatisés.
+- Hash des mots de passe (**bcrypt**)  
+- Tokens JWT signés avec `JWT_SECRET`  
+- Middleware de protection des routes admin  
+- CORS configuré pour le frontend Angular  
 
-📚 Ressources utiles
-Express : https://expressjs.com
+---
 
-MongoDB : https://www.mongodb.com
+## 📚 Ressources utiles
 
-Mongoose : https://mongoosejs.com
-
-JWT : https://jwt.io
-
-bcrypt : https://github.com/kelektiv/node.bcrypt.js (github.com in Bing)
+- Express : https://expressjs.com  
+- MongoDB : https://www.mongodb.com  
+- Mongoose : https://mongoosejs.com  
+- JWT : https://jwt.io  
+- bcrypt : https://github.com/kelektiv/node.bcrypt.js
