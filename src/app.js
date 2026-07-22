@@ -23,7 +23,7 @@ app.get('/api/status', (req, res) => {
   res.json({ message: 'Backend OK' });
 });;
 
-app.use('/api/auth', require('../api/auth/routes/auth.routes'));
+app.use('/api/auth', require('../api/routes/auth.routes'));
 app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'))
 
