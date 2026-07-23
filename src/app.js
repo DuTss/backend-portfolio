@@ -2,6 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
+
+const contactLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 3, // max 3 messages / minute
+  message: { error: 'Trop de tentatives, réessayez plus tard.' }
+});
+
 
 require('dotenv').config();
 
@@ -19,11 +27,12 @@ mongoose.connect('mongodb://localhost:27017/portfolio')
   .catch(err => console.error('Erreur de connexion à MongoDB', err));
 
 app.get('/api/status', (req, res) => {
-  
   res.json({ message: 'Backend OK' });
 });;
 
 app.use('/api/auth', require('../api/routes/auth.routes'));
+app.use('/api/contact', contactLimiter);
+app.use('/api/contact', require('../api/routes/contact.routes'));
 app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'))
 
