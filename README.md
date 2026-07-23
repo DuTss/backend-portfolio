@@ -35,34 +35,26 @@ Architecture :
 - dotenv (variables d’environnement)  
 - CORS (communication avec le frontend)
 
-### 🗄️ Base de données
-
-- MongoDB (Atlas ou local)
-
 ---
 
 ## 📂 Structure du projet
 
 ```text
 backend/
- ├── controllers/
- │     ├── auth.controller.js
- │     ├── projects.controller.js
- │     └── services.controller.js
- ├── models/
- │     ├── User.js
- │     ├── Project.js
- │     └── Service.js
- ├── routes/
- │     ├── auth.routes.js
- │     ├── projects.routes.js
- │     └── services.routes.js
- ├── middleware/
- │     └── auth.middleware.js
- ├── config/
- │     └── db.js
- ├── server.js
- └── .env
+ ├── api/
+ │   ├── controllers/
+ │   ├── middleware/
+ │   ├── models/
+ │   ├── routes/
+ │   └── utils/
+ ├── src/
+ │   └── app.js
+ ├── node_modules/
+ ├── .env
+ ├── .gitignore
+ ├── package-lock.json
+ ├── package.json
+ └── README.md
 ```
 
 ---
@@ -139,6 +131,83 @@ POST   /api/services
 PUT    /api/services/:id
 DELETE /api/services/:id
 ```
+
+## 📬 Envoi d’email (Nodemailer)
+
+Le backend inclut un système d’envoi d’email via **Nodemailer**, utilisé par le formulaire de contact du portfolio.
+
+### ✉️ Fonctionnalités
+- Envoi d’un email vers l’adresse professionnelle
+- Validation des données reçues
+- Gestion des erreurs SMTP
+- Protection anti‑spam côté frontend (honeypot + rate‑limit)
+
+### ⚙️ Configuration
+
+Ajouter les variables SMTP dans `.env` :
+
+MAIL_HOST=smtp.gmail.com  
+MAIL_PORT=465  
+MAIL_SECURE=true  
+MAIL_USER=ton_email@gmail.com  
+MAIL_PASS=mot_de_passe_application  
+MAIL_TO=emduthy@gmail.com  
+
+> Pour Gmail, un **mot de passe d’application** est obligatoire.
+
+### 🔧 Exemple d’implémentation
+
+import nodemailer from 'nodemailer';
+
+export const sendMail = async (req, res) => {
+  const { name, email, message } = req.body;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      secure: process.env.MAIL_SECURE === 'true',
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Portfolio" <${process.env.MAIL_USER}>`,
+      to: process.env.MAIL_TO,
+      subject: `Nouveau message de ${name}`,
+      html: `
+        <h2>Nouveau message depuis le portfolio</h2>
+        <p><strong>Nom :</strong> ${name}</p>
+        <p><strong>Email :</strong> ${email}</p>
+        <p><strong>Message :</strong><br>${message}</p>
+      `,
+    });
+
+    res.status(200).json({ success: true, message: 'Email envoyé avec succès.' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erreur lors de l’envoi de l’email.' });
+  }
+};
+
+### 🔗 Route API
+
+POST /api/contact  
+
+Payload attendu :
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "message": "Bonjour, j’aimerais discuter d’un projet."
+}
+
+### 🛡️ Sécurité email
+- SMTP sécurisé (SSL/TLS)
+- Validation des champs côté backend
+- Honeypot côté frontend
+- Limitation des envois (rate‑limit)
 
 ---
 
