@@ -1,4 +1,4 @@
-const Contact = require('../models/contact.model.js');
+const Contact = require('../models/Contact');
 const nodemailer = require('nodemailer');
 
 const sendContactMessage = async (req, res) => {
