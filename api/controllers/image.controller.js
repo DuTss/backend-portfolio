@@ -1,3 +1,5 @@
+const Project = require("../models/Project");
+
 exports.upload = async (req, res) => {
   try {
     if (!req.file) {
@@ -7,17 +9,15 @@ exports.upload = async (req, res) => {
       });
     }
 
-    // Ici tu peux sauvegarder l'image :
-    // - Cloudinary
-    // - AWS S3
-    // - FileSystem local
-    // - Base64 → MongoDB
-    // etc.
+    // Convertir l'image en base64
+    const base64Image = req.file.buffer.toString("base64");
+    console.log("FILE OBJECT:", req.file);
 
+    // Retourner l'image encodée
     res.json({
       message: "Image uploadée avec succès",
       mimetype: req.file.mimetype,
-      size: req.file.size
+      image: base64Image
     });
 
   } catch (err) {
