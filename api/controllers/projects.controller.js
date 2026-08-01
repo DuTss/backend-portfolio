@@ -11,6 +11,7 @@ exports.getOne = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
+  console.log("REQ BODY:", req.body); 
   const project = await Project.create({
     title: req.body.title,
     description: req.body.description,

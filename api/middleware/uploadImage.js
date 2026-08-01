@@ -1,8 +1,5 @@
 const multer = require("multer");
 
-// Stockage en mémoire (recommandé si tu traites ensuite l'image)
-const storage = multer.memoryStorage();
-
 // Liste des MIME types autorisés
 const allowedMimeTypes = [
   "image/jpeg",
@@ -25,12 +22,21 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const uploadImage = multer({
-  storage,
-  fileFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5 Mo max
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.originalname.split('.').pop(); // extension
+    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, unique + "." + ext); // nom court et propre
   }
 });
+
+
+const uploadImage = multer({ storage,  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5 Mo max
+  } });
 
 module.exports = uploadImage;
