@@ -41,6 +41,7 @@ app.use('/api/contact', contactLimiter);
 app.use('/api/contact', require('../api/routes/contact.routes'));
 app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'));
+app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
