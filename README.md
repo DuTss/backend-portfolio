@@ -80,6 +80,19 @@ Le backend inclut un système complet d’authentification :
 
 ---
 
+## 🧱 Middleware globaux
+
+Le backend utilise plusieurs middlewares essentiels pour assurer la communication avec le frontend Angular et sécuriser l’API :
+
+- `express.json()` — parse le JSON envoyé par le frontend  
+- `express.urlencoded({ extended: true })` — support des formulaires  
+- `CORS` — autorise les requêtes provenant du frontend Angular  
+- `morgan` *(optionnel)* — logs HTTP pour le debug  
+- `rate-limit` *(optionnel)* — limite le nombre de requêtes pour éviter le spam  
+- `helmet` *(optionnel)* — sécurise les headers HTTP  
+
+---
+
 ## 🧩 Modèles Mongoose
 
 ### 👤 User
@@ -102,6 +115,16 @@ createdAt: Date
 title: String,
 description: String,
 icon: String
+```
+
+### 🧪 Technology
+```js
+name: String,
+category: String,
+color: String,
+iconName: String,
+websiteUrl: String,
+isActive: Boolean
 ```
 
 ---
@@ -132,9 +155,69 @@ PUT    /api/services/:id
 DELETE /api/services/:id
 ```
 
+### 🧪 Technologies
+```http
+GET    /api/technologies
+POST   /api/technologies
+PUT    /api/technologies/:id
+DELETE /api/technologies/:id
+```
+
+## 🧠 Organisation des controllers
+
+Chaque controller gère une ressource spécifique :
+
+- `auth.controller.js` — login, register  
+- `project.controller.js` — CRUD projets + gestion de l’upload d’image  
+- `service.controller.js` — CRUD services  
+- `technology.controller.js` — CRUD technologies  
+- `contact.controller.js` — envoi d’email via Nodemailer  
+
+---
+
+## 🖼️ Upload d’images (Multer)
+
+- Upload des images
+- Stockage dans uploads/projects
+- Vérification du type de fichier
+- Suppression automatique lors du delete
+
+```js
+    if (project.image) {
+      const imagePath = path.join(__dirname, "../../..", project.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+```
+
+L’upload des images utilise Multer avec les paramètres suivants :
+
+- 📦 Dossier de stockage : `uploads/projects`
+- 🖼️ Types acceptés : `.jpg`, `.jpeg`, `.png`, `.webp`
+- 📏 Taille max recommandée : 5 Mo
+- 🔧 Middleware utilisé : `upload.single("image")`
+- 🔗 Route concernée : `POST /api/projects`
+
+Une vérification du type MIME est effectuée pour éviter les fichiers non autorisés.
+
+
+---
+
 ## 📬 Envoi d’email (Nodemailer)
 
 Le backend inclut un système d’envoi d’email via **Nodemailer**, utilisé par le formulaire de contact du portfolio.
+
+L’email envoyé par le backend utilise :
+
+- Format : **HTML** pour une meilleure lisibilité  
+- Expéditeur : `"Portfolio" <MAIL_USER>`  
+- Destinataire : `MAIL_TO`  
+- Sécurité : connexion SMTP sécurisée (SSL/TLS)  
+- Gestion des erreurs : réponse JSON + log serveur  
+
+En cas d’erreur SMTP, une réponse `500` est renvoyée au frontend.
+
 
 ### ✉️ Fonctionnalités
 - Envoi d’un email vers l’adresse professionnelle
@@ -211,6 +294,22 @@ Payload attendu :
 
 ---
 
+## ⚠️ Gestion des erreurs
+
+Le backend renvoie des réponses JSON cohérentes pour toutes les routes :
+
+- **200** — succès  
+- **201** — ressource créée  
+- **400** — données invalides  
+- **401** — non autorisé (token manquant ou invalide)  
+- **404** — ressource introuvable  
+- **500** — erreur interne du serveur  
+
+Toutes les opérations critiques sont encapsulées dans des `try/catch` pour éviter les crashs.
+
+
+---
+
 ## 📦 Installation
 
 ### 1️⃣ Cloner le projet
@@ -235,6 +334,16 @@ PORT=3000
 MONGO_URI=mongodb+srv://...
 JWT_SECRET=ton_secret
 ```
+
+## ⚙️ Variables d’environnement supplémentaires
+
+En plus des variables déjà présentes, il est recommandé d’ajouter :
+
+FRONTEND_URL=http://localhost:4200  
+NODE_ENV=development  
+
+Optionnel :
+UPLOAD_DIR=uploads/projects 
 
 ---
 
