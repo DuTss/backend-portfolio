@@ -22,7 +22,6 @@ exports.create = async (req, res) => {
   res.json(all);
 };
 
-
 exports.update = async (req, res) => {
   const service = await Service.findByIdAndUpdate(
     req.params.id,
