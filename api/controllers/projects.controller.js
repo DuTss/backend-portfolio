@@ -4,6 +4,7 @@ const path    = require("path");
 
 exports.getAll = async (req, res) => {
   const projects = await Project.find().populate("tech");
+  console.log("PROJETS : " , projects)
   res.json(projects);
 };
 
