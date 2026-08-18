@@ -15,17 +15,4 @@ const ServiceSchema = new Schema({
   visible: { type: Boolean, default: true } // remplace "featured"
 }, { timestamps: true });
 
-// Génération simple du slug si absent
-ServiceSchema.pre('validate', function(next) {
-  if (!this.slug && this.title) {
-    this.slug = this.title.toString().toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
-  }
-  next();
-});
-
 module.exports = mongoose.model('Service', ServiceSchema);
