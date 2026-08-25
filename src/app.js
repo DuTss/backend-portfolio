@@ -32,7 +32,7 @@ app.use(
         workerSrc: ["'self'", "blob:"],
         imgSrc: ["'self'", "data:", "blob:"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        connectSrc: ["'self'", "http://localhost:4200", "*"],
+        connectSrc: ["'self'", process.env.FRONTEND_URL, "*"],
       },
     },
     crossOriginEmbedderPolicy: false,
