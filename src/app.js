@@ -77,7 +77,8 @@ app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'));
 app.use('/api/technologies', require('../api/routes/technology.routes'));
 
-app.use("/uploads", express.static("uploads"));
+app.use(uploadRoutes);
+//app.use("/uploads", express.static("uploads"));
 
 // --- Middleware 404 ---
 app.use((req, res) => {
