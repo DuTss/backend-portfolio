@@ -90,10 +90,21 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message });
 });
 
-// --- Lancement ---
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+// // --- Lancement ---
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route introuvable' });
 });
+
+// 4. Pour le développement local uniquement
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Serveur local lancé sur http://localhost:${PORT}`);
+  });
+}
+
+// 5. EXPORT OBLIGATOIRE POUR VERCEL
+module.exports = app;
