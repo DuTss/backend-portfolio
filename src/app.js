@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const uploadRoutes = require('./api/routes/upload.routes');
+//const uploadRoutes = require('./api/routes/upload.routes');
 
 const app = express();
 
@@ -78,8 +78,8 @@ app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'));
 app.use('/api/technologies', require('../api/routes/technology.routes'));
 
-app.use(uploadRoutes);
-//app.use("/uploads", express.static("uploads"));
+//app.use(uploadRoutes);
+app.use("/uploads", express.static("uploads"));
 
 // --- Middleware 404 ---
 app.use((req, res) => {
