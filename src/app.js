@@ -14,27 +14,40 @@ const app = express();
 app.use(
   helmet({
     contentSecurityPolicy: {
-      useDefaults: true,
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "'unsafe-eval'",   // Angular dev mode en a besoin
-          "blob:",
-        ],
-        scriptSrcElem: [
-          "'self'",
-          "'unsafe-inline'",
-          "'unsafe-eval'",
-          "blob:",
-        ],
-        workerSrc: ["'self'", "blob:"],
-        imgSrc: ["'self'", "data:", "blob:"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        connectSrc: ["'self'", process.env.FRONTEND_URL, "*"],
-      },
-    },
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      "'unsafe-eval'",
+      "blob:",
+      "*.vercel-insights.com",
+      "*.vercel.com",
+      "*.vercel.app",
+      "*.infird.com"
+    ],
+    scriptSrcElem: [
+      "'self'",
+      "'unsafe-inline'",
+      "'unsafe-eval'",
+      "blob:",
+      "*.vercel-insights.com",
+      "*.vercel.com",
+      "*.vercel.app",
+      "*.infird.com"
+    ],
+    imgSrc: ["'self'", "data:", "blob:", "*"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    connectSrc: ["'self'", "*"],
+    fontSrc: ["'self'", "data:"],
+    objectSrc: ["'none'"],
+    frameSrc: ["'none'"],
+    workerSrc: ["'self'", "blob:"],
+    scriptSrcAttr: ["'unsafe-inline'"],
+    upgradeInsecureRequests: [],
+  }
+}
+,
     crossOriginEmbedderPolicy: false,
     crossOriginOpenerPolicy: false,
     crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -100,7 +113,7 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route introuvable' });
 });
 
-// 4. Pour le développement local uniquement
+// Pour le développement local uniquement
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
