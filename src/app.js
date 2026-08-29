@@ -38,7 +38,7 @@ app.use(
     ],
     imgSrc: ["'self'", "data:", "blob:", "*"],
     styleSrc: ["'self'", "'unsafe-inline'"],
-    connectSrc: ["'self'", "*"],
+    connectSrc: [  "'self'",  "https://backend-portfolio-delta-one.vercel.app",  "http://localhost:3000",  "*"],
     fontSrc: ["'self'", "data:"],
     objectSrc: ["'none'"],
     frameSrc: ["'none'"],
@@ -57,7 +57,14 @@ app.use(
 
 // --- CORS ---
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+    origin: [
+    "http://localhost:4200",
+    process.env.FRONTEND_URL,
+    /\.vercel\.app$/,
+    /\.vercel\.com$/
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  // origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
