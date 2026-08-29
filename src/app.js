@@ -149,7 +149,6 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -167,28 +166,18 @@ app.use(
   })
 );
 
-// --- CORS (CORRECT) ---
+// --- CORS GLOBAL (LA SEULE VERSION QUI MARCHE SUR VERCEL) ---
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // UNE SEULE ORIGINE
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
-
-app.options((req, res) => {
-  res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.sendStatus(200);
-});
 
 // --- Middlewares globaux ---
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// --- Connexion MongoDB (AVANT les routes) ---
+// --- Connexion MongoDB ---
 connectDB().catch(err => {
   console.error("MongoDB connection failed:", err);
 });
@@ -214,16 +203,15 @@ app.use('/api/technologies', require('../api/routes/technology.routes'));
 
 app.use("/uploads", express.static("uploads"));
 
-// --- Middleware 404 (PLACÉ APRÈS LES ROUTES) ---
+// --- 404 ---
 app.use((req, res) => {
   res.status(404).json({ error: "Route introuvable" });
 });
 
-// --- Middleware global d'erreurs ---
+// --- Erreurs globales ---
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json({ error: err.message });
 });
 
-// Export pour Vercel
 module.exports = app;
