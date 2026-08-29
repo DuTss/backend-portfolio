@@ -184,7 +184,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // --- Connexion MongoDB (AVANT les routes) ---
-connectDB();
+connectDB().catch(err => {
+  console.error("MongoDB connection failed:", err);
+});
 
 // --- Rate-limit contact ---
 const contactLimiter = rateLimit({
