@@ -12,48 +12,58 @@ const connectDB = require('./db');
 const app = express();
 
 // --- Sécurité ---
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: {
+//   directives: {
+//     defaultSrc: ["'self'"],
+//     scriptSrc: [
+//       "'self'",
+//       "'unsafe-inline'",
+//       "'unsafe-eval'",
+//       "blob:",
+//       "*.vercel-insights.com",
+//       "*.vercel.com",
+//       "*.vercel.app",
+//       "*.infird.com"
+//     ],
+//     scriptSrcElem: [
+//       "'self'",
+//       "'unsafe-inline'",
+//       "'unsafe-eval'",
+//       "blob:",
+//       "*.vercel-insights.com",
+//       "*.vercel.com",
+//       "*.vercel.app",
+//       "*.infird.com"
+//     ],
+//     imgSrc: ["'self'", "data:", "blob:", "*"],
+//     styleSrc: ["'self'", "'unsafe-inline'"],
+//     connectSrc: [  "'self'",  "https://backend-portfolio-delta-one.vercel.app",  "http://localhost:3000",  "*"],
+//     fontSrc: ["'self'", "data:"],
+//     objectSrc: ["'none'"],
+//     frameSrc: ["'none'"],
+//     workerSrc: ["'self'", "blob:"],
+//     scriptSrcAttr: ["'unsafe-inline'"],
+//     upgradeInsecureRequests: [],
+//   }
+// }
+// ,
+//     crossOriginEmbedderPolicy: false,
+//     crossOriginOpenerPolicy: false,
+//     crossOriginResourcePolicy: { policy: "cross-origin" },
+//   })
+// );
+
 app.use(
   helmet({
-    contentSecurityPolicy: {
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: [
-      "'self'",
-      "'unsafe-inline'",
-      "'unsafe-eval'",
-      "blob:",
-      "*.vercel-insights.com",
-      "*.vercel.com",
-      "*.vercel.app",
-      "*.infird.com"
-    ],
-    scriptSrcElem: [
-      "'self'",
-      "'unsafe-inline'",
-      "'unsafe-eval'",
-      "blob:",
-      "*.vercel-insights.com",
-      "*.vercel.com",
-      "*.vercel.app",
-      "*.infird.com"
-    ],
-    imgSrc: ["'self'", "data:", "blob:", "*"],
-    styleSrc: ["'self'", "'unsafe-inline'"],
-    connectSrc: [  "'self'",  "https://backend-portfolio-delta-one.vercel.app",  "http://localhost:3000",  "*"],
-    fontSrc: ["'self'", "data:"],
-    objectSrc: ["'none'"],
-    frameSrc: ["'none'"],
-    workerSrc: ["'self'", "blob:"],
-    scriptSrcAttr: ["'unsafe-inline'"],
-    upgradeInsecureRequests: [],
-  }
-}
-,
+    contentSecurityPolicy: false, // IMPORTANT : désactive CSP sur Vercel
     crossOriginEmbedderPolicy: false,
     crossOriginOpenerPolicy: false,
     crossOriginResourcePolicy: { policy: "cross-origin" },
   })
 );
+
 
 
 // --- CORS ---
@@ -66,8 +76,13 @@ app.use(cors({
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   // origin: process.env.FRONTEND_URL,
-  credentials: true
+    allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 200
 }));
+
+app.options("*", cors());
 
 // --- Middlewares globaux ---
 app.use(cookieParser());
