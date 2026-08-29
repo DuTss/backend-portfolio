@@ -164,30 +164,26 @@ const app = express();
 const allowedOrigins = [
   'https://frontend-portfolio-one-psi.vercel.app',
   process.env.FRONTEND_URL
-].filter(Boolean); // Filtre les valeurs undefined
+].filter(Boolean).map(url => url.replace(/\/$/, "")); // Retire tout slash final éventuel
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    // Permet les requêtes serveur à serveur ou Postman (origin undefined)
-    if (!origin) return callback(null, true);
-    
-    // Nettoie l'origin (retire l'éventuel slash final)
-    const cleanOrigin = origin.replace(/\/$/, "");
-    const isAllowed = allowedOrigins.some(o => o.replace(/\/$/, "") === cleanOrigin);
-
-    if (isAllowed) {
+  origin: function (origin, callback) {
+    // Si la requête vient de Postman/curl (pas d'en-tête origin) ou d'un domaine autorisé
+    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
       callback(null, true);
     } else {
-      callback(new Error('Non autorisé par CORS'));
+      // Renvoie false pour bloquer poliment sans faire crasher la Serverless Function
+      callback(null, false);
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 
 app.use(cors(corsOptions));
-// Répond automatiquement 200/204 aux requêtes preflight OPTIONS
+
+// Autoriser explicitement toutes les requêtes OPTIONS (preflight)
 app.options('*', cors(corsOptions));
 
 // --- Middlewares globaux ---
