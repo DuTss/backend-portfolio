@@ -176,7 +176,7 @@ app.use(cors({
 }));
 
 // Preflight OPTIONS
-app.options("*", cors());
+app.options("/api/*", cors());
 
 // --- Middlewares globaux ---
 app.use(cookieParser());
