@@ -92,17 +92,6 @@ app.get('/api/status', (req, res) => {
   res.json({ message: 'Backend OK' });
 });
 
-// --- Routes ---
-app.use('/api/image', require('../api/routes/image.routes'));
-app.use('/api/auth', require('../api/routes/auth.routes'));
-app.use('/api/contact', contactLimiter, require('../api/routes/contact.routes'));
-app.use('/api/projects', require('../api/routes/projects.routes'));
-app.use('/api/services', require('../api/routes/services.routes'));
-app.use('/api/technologies', require('../api/routes/technology.routes'));
-
-//app.use(uploadRoutes);
-app.use("/uploads", express.static("uploads"));
-
 // --- Middleware 404 ---
 app.use((req, res) => {
   res.status(404).json({ error: "Route introuvable" });
@@ -125,13 +114,18 @@ app.use((err, req, res, next) => {
 //     console.log(`Serveur local lancé sur http://localhost:${PORT}`);
 //   });
 // }
-connectDB().then(() => {
-  app.listen(3000, () => {
-    console.log('Server running on port 3000');
-  });
-}).catch(err => {
-  console.error('Failed to start server:', err);
-});
+connectDB()
+
+// --- Routes ---
+app.use('/api/image', require('../api/routes/image.routes'));
+app.use('/api/auth', require('../api/routes/auth.routes'));
+app.use('/api/contact', contactLimiter, require('../api/routes/contact.routes'));
+app.use('/api/projects', require('../api/routes/projects.routes'));
+app.use('/api/services', require('../api/routes/services.routes'));
+app.use('/api/technologies', require('../api/routes/technology.routes'));
+
+//app.use(uploadRoutes);
+app.use("/uploads", express.static("uploads"));
 
 // 5. EXPORT OBLIGATOIRE POUR VERCEL
 module.exports = app;
