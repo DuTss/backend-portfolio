@@ -160,10 +160,35 @@ const app = express();
 //app.use(helmet());
 
 // --- CORS GLOBAL (LA SEULE VERSION QUI MARCHE SUR VERCEL) ---
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
+// --- CORS GLOBAL ---
+const allowedOrigins = [
+  'https://frontend-portfolio-one-psi.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean); // Filtre les valeurs undefined
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Permet les requêtes serveur à serveur ou Postman (origin undefined)
+    if (!origin) return callback(null, true);
+    
+    // Nettoie l'origin (retire l'éventuel slash final)
+    const cleanOrigin = origin.replace(/\/$/, "");
+    const isAllowed = allowedOrigins.some(o => o.replace(/\/$/, "") === cleanOrigin);
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Non autorisé par CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
+// Répond automatiquement 200/204 aux requêtes preflight OPTIONS
+app.options('*', cors(corsOptions));
 
 // --- Middlewares globaux ---
 app.use(cookieParser());
