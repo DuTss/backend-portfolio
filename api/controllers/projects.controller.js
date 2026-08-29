@@ -3,8 +3,10 @@ const fs      = require("fs");
 const path    = require("path");
 
 exports.getAll = async (req, res) => {
-  console.log("===> LA ROUTE PROJECTS EST BIEN ATTEINTE ! <===");
+  console.log("===> LA ROUTE PROJECTS EST BIEN ATTEINTE ! <===")
+  console.log("Nom de la DB active :", mongoose.connection.name); // <--- AJOUTE CECI
   const projects = await Project.find().populate("tech");
+  console.log("Nombre de projets :", projects.length);
   res.json(projects);
 };
 
