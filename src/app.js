@@ -160,31 +160,10 @@ const app = express();
 //app.use(helmet());
 
 // --- CORS GLOBAL (LA SEULE VERSION QUI MARCHE SUR VERCEL) ---
-// --- CORS GLOBAL ---
-const allowedOrigins = [
-  'https://frontend-portfolio-one-psi.vercel.app',
-  process.env.FRONTEND_URL
-].filter(Boolean).map(url => url.replace(/\/$/, "")); // Retire tout slash final éventuel
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Si la requête vient de Postman/curl (pas d'en-tête origin) ou d'un domaine autorisé
-    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
-      callback(null, true);
-    } else {
-      // Renvoie false pour bloquer poliment sans faire crasher la Serverless Function
-      callback(null, false);
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-};
-
-app.use(cors(corsOptions));
-
-// Autoriser explicitement toutes les requêtes OPTIONS (preflight)
-app.options('*', cors(corsOptions));
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 
 // --- Middlewares globaux ---
 app.use(cookieParser());
