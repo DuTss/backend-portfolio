@@ -170,11 +170,15 @@ app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// --- Connexion MongoDB ---
-connectDB().catch(err => {
-  console.error("MongoDB connection failed:", err);
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("Erreur de connexion DB:", err);
+    res.status(500).json({ error: "Erreur serveur / Base de données" });
+  }
 });
-
 // --- Rate-limit contact ---
 const contactLimiter = rateLimit({
   windowMs: 60 * 1000,
