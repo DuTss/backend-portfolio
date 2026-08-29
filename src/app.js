@@ -151,19 +151,34 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
 const connectDB = require('./db');
 
 const app = express();
 
-// --- Sécurité ---
-//app.use(helmet());
+// --- CORS GLOBAL ---
+const allowedOrigins = [
+  'https://frontend-portfolio-one-psi.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean).map(url => url.replace(/\/$/, ""));
 
-// --- CORS GLOBAL (LA SEULE VERSION QUI MARCHE SUR VERCEL) ---
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permet les requêtes serveur (Postman/curl) ou si l'origine correspond au frontend
+    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
+
+// Répond directement aux requêtes preflight OPTIONS sans faire crasher Express
+app.options('*', cors(corsOptions));
 
 // --- Middlewares globaux ---
 app.use(cookieParser());
