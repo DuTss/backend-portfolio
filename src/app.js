@@ -175,9 +175,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Preflight OPTIONS
-app.options("/api/*", cors());
-
 // --- Middlewares globaux ---
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
