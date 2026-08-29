@@ -157,8 +157,7 @@ const connectDB = require('./db');
 const app = express();
 
 // --- Sécurité ---
-app.use(helmet({ contentSecurityPolicy: false }));
-
+app.use(helmet());
 
 // --- CORS GLOBAL (LA SEULE VERSION QUI MARCHE SUR VERCEL) ---
 app.use(cors({
