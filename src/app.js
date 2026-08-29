@@ -85,7 +85,6 @@ const contactLimiter = rateLimit({
 // mongoose.connect(process.env.MONGO_URI)
 //   .then(() => console.log('Connecté à MongoDB'))
 //   .catch(err => console.error('Erreur de connexion à MongoDB', err));
-await connectDB(); // IMPORTANT
 
 // --- Status ---
 app.get('/api/status', (req, res) => {
