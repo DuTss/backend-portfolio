@@ -4,13 +4,7 @@ const path    = require("path");
 const mongoose = require('mongoose');
 
 exports.getAll = async (req, res) => {
-  console.log("===> LA ROUTE PROJECTS EST BIEN ATTEINTE ! <===")
-  console.log("Nom de la DB active :", mongoose.connection.name); // <--- AJOUTE CECI
-  // Liste toutes les collections existantes sur MongoDB Atlas
-  const collections = await mongoose.connection.db.listCollections().toArray();
-  console.log("Collections existantes :", collections.map(c => c.name));
   const projects = await Project.find().populate("tech");
-  console.log("Nombre de projets :", projects.length);
   res.json(projects);
 };
 
