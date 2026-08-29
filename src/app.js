@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const { connectDB } = require('./db');
 //const uploadRoutes = require('./api/routes/upload.routes');
 
 const app = express();
@@ -81,9 +82,10 @@ const contactLimiter = rateLimit({
 });
 
 // --- Connexion MongoDB ---
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connecté à MongoDB'))
-  .catch(err => console.error('Erreur de connexion à MongoDB', err));
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => console.log('Connecté à MongoDB'))
+//   .catch(err => console.error('Erreur de connexion à MongoDB', err));
+await connectDB(); // IMPORTANT
 
 // --- Status ---
 app.get('/api/status', (req, res) => {
@@ -115,10 +117,6 @@ app.use((err, req, res, next) => {
 // // --- Lancement ---
 // const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
-
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route introuvable' });
-});
 
 // Pour le développement local uniquement
 if (process.env.NODE_ENV !== 'production') {
