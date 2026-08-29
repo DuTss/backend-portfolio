@@ -119,12 +119,19 @@ app.use((err, req, res, next) => {
 // app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
 
 // Pour le développement local uniquement
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Serveur local lancé sur http://localhost:${PORT}`);
+// if (process.env.NODE_ENV !== 'production') {
+//   const PORT = process.env.PORT || 3000;
+//   app.listen(PORT, () => {
+//     console.log(`Serveur local lancé sur http://localhost:${PORT}`);
+//   });
+// }
+connectDB().then(() => {
+  app.listen(3000, () => {
+    console.log('Server running on port 3000');
   });
-}
+}).catch(err => {
+  console.error('Failed to start server:', err);
+});
 
 // 5. EXPORT OBLIGATOIRE POUR VERCEL
 module.exports = app;
