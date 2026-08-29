@@ -3,6 +3,7 @@ const fs      = require("fs");
 const path    = require("path");
 
 exports.getAll = async (req, res) => {
+  console.log("===> LA ROUTE PROJECTS EST BIEN ATTEINTE ! <===");
   const projects = await Project.find().populate("tech");
   res.json(projects);
 };
