@@ -1,6 +1,7 @@
 const Project = require('../models/Project');
 const fs      = require("fs");
 const path    = require("path");
+const mongoose = require('mongoose');
 
 exports.getAll = async (req, res) => {
   console.log("===> LA ROUTE PROJECTS EST BIEN ATTEINTE ! <===")
