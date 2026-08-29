@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const { connectDB } = require('./db');
+const connectDB = require('./db');
 //const uploadRoutes = require('./api/routes/upload.routes');
 
 const app = express();
