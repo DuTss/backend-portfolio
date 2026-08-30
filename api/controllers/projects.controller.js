@@ -1,7 +1,6 @@
 const Project = require('../models/Project');
 const fs      = require("fs");
 const path    = require("path");
-const mongoose = require('mongoose');
 
 exports.getAll = async (req, res) => {
   const projects = await Project.find().populate("tech");
@@ -14,7 +13,6 @@ exports.getOne = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  console.log("REQ BODY:", req.body); 
   const project = await Project.create({
     title: req.body.title,
     description: req.body.description,
@@ -23,7 +21,6 @@ exports.create = async (req, res) => {
   });
 
   const all = await Project.find();
-
   res.json(all);
 };
 
