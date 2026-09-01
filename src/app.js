@@ -198,14 +198,16 @@ app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'));
 app.use('/api/technologies', require('../api/routes/technology.routes'));
 
-app.use("/uploads", express.static("uploads"),{
+app.use("/uploads", express.static("uploads")
+//,{
   // setHeaders: (res, filePath) => {
   //   // Permet à Angular de lire l'image depuis une autre origine
   //   res.setHeader('Access-Control-Allow-Origin', '*');
   //   // Sécurité supplémentaire pour CORB/COEP
   //   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   // }
-});
+//}
+);
 
 // --- 404 ---
 app.use((req, res) => {
