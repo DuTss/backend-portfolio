@@ -16,11 +16,6 @@ const allowedMimeTypes = [
   "image/x-icon"
 ];
 
-// // 🔥 Vérification dossier uploads
-// if (!fs.existsSync("uploads")) {
-//   fs.mkdirSync("uploads");
-// }
-
 // 🔥 Storage Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
