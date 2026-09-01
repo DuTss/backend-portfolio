@@ -32,6 +32,16 @@ router.get('/api/files/:id', async (req, res) => {
   try {
     await ensureConnected();
     const id = req.params.id;
+
+    // 1. En-têtes pour autoriser le Cross-Origin (Déblocage CORB)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+
+    const mimeType = mime.lookup(filePath);
+    if (mimeType) {
+      res.setHeader('Content-Type', mimeType);
+    }
+    
     const stream = downloadStreamById(id);
     stream.on('error', () => res.status(404).json({ error: 'Not found' }));
     stream.pipe(res);
