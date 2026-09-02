@@ -5,6 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const path = require('path');
 const connectDB = require('./db');
 
 const app = express();
@@ -51,7 +52,8 @@ app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'));
 app.use('/api/technologies', require('../api/routes/technology.routes'));
 
-app.use("/uploads", express.static("uploads")
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use("/uploads", express.static("uploads")
   //,{
   // setHeaders: (res, filePath) => {
   //   // Permet à Angular de lire l'image depuis une autre origine
@@ -59,7 +61,7 @@ app.use("/uploads", express.static("uploads")
   //   // Sécurité supplémentaire pour CORB/COEP
   //   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   //}
-);
+//);
 
 // --- 404 ---
 app.use((req, res) => {
