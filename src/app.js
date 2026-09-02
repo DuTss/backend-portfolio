@@ -52,7 +52,7 @@ app.use('/api/projects', require('../api/routes/projects.routes'));
 app.use('/api/services', require('../api/routes/services.routes'));
 app.use('/api/technologies', require('../api/routes/technology.routes'));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 //app.use("/uploads", express.static("uploads")
   //,{
   // setHeaders: (res, filePath) => {
