@@ -33,10 +33,15 @@ app.use(async (req, res, next) => {
     res.status(500).json({ error: "Erreur serveur / Base de données" });
   }
 });
+
+// Active la confiance envers le proxy Vercel (1 niveau de proxy)
+app.set('trust proxy', 1);
+
 // --- Rate-limit contact ---
 const contactLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 3,
+  validate: { trustProxy: false }, // Masque les warnings liés aux proxys si trust proxy est déjà configuré
   message: { error: 'Trop de tentatives, réessayez plus tard.' }
 });
 
